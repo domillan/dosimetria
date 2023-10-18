@@ -578,7 +578,7 @@ function addAteAgr(e)
 function delAteAgr(e)
 {
 	console.log(e);
-	crime.ateAgr.splice(e.value, 1);
+	crime.ateAgr.splice(e.target.value, 1);
 	mostraAteAgr();
 }
 
@@ -605,7 +605,7 @@ function addMinMaj(e)
 function delMinMaj(e)
 {
 	console.log(e);
-	crime.minMaj.splice(e.value, 1);
+	crime.minMaj.splice(e.target.value, 1);
 	mostraMinMaj();
 }
 
