@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.2/math.js"></script>
+
+<script>
+
+class Tempo {
+	constructor(anos=0, meses=0, dias=0) {
+    this.tempo = anos*360 + meses*30 + dias;
+  }
+	addDias(numero=0)
+	{
+		this.tempo += numero;
+	}	
+	addMeses(numero=0)
+	{
+		this.tempo += numero*30;
+	}	
+	addAnos(numero=0)
+	{
+		this.tempo += numero*360;
+	}
+	mesesTotal()
+	{
+		return this.tempo/30;
+	}
+	anosTotal()
+	{
+		return this.tempo/360.0;
+	}
+	diasTotal()
+	{
+		return this.tempo;
+	}
+	dias()
+	{
+		return Math.trunc(this.tempo%30);
+	}
+	meses()
+	{
+		return Math.trunc(this.mesesTotal()%12);
+	}
+	anos()
+	{
+		return Math.trunc(this.anosTotal());
+	}
+	string()
+	{
+		let texto = [], anos = this.anos(), meses = this.meses(), dias = this.dias();
+		if(anos>0) texto.push(anos+" ano(s)");
+		if(meses>0) texto.push(meses+" mese(s)");
+		if(dias>0) texto.push(dias+" dia(s)");
+		return texto.join(", ").replace(/,([^,]*)$/, " e" + '$1');
+	}
+}
+class Crime {
+  constructor(tipo={}, circunstancias={}, ateAgr = [], minMaj = []) {
+    this.tipo = tipo;
+	this.circunstancias = circunstancias;
+	this.ateAgr = ateAgr;
+	this.minMaj = minMaj;
+  }
+  
+  addAtenuante(ate={})
+  {
+	this.ateAgr.push(ate);
+  }
+  
+  addAgravante(agr={})
+  {
+	this.addAtenuante(agr);
+  }
+  
+  penaBase()
+  {
+	mostrar("", true);
+	mostrar("<li>Crime de "+ this.tipo.nome +", mínima de " + this.tipo.min.string()+" e máxima de " + this.tipo.max.string()+".</li>");
+	//mostrar("<h5>1ª Fase:</h5>");
+	let min = this.tipo.min;
+	let neg = this.circunstancias.negativas();
+	let oitavo = this.tipo.umOitavo();
+	let tempo = new Tempo(min.anosTotal() + (neg * oitavo.anosTotal()));
+	mostrar("<li>Pena entre mínimo de " + min.string() + " e termo médio de " + this.tipo.termoMedio().string() + ", acrescentando " + oitavo.string() + " para cada uma das " + neg +" circunstâncias negativas.</li>");
+	mostrar("<li><strong>Pena base fixada em "+ tempo.string()+".</strong></li>");
+	//mostrar("<h5>2ª Fase:</h5>");
+	
+	return tempo;
+  }
+  
+  penaProvisoria()
+  {
+	let base = this.penaBase();
+	let umSexto = base.mesesTotal()/6;
+	//let prepS = Math.trunc(umSexto);
+	//let prep = Math.trunc(umSexto * 5 / 6);
+	//let comum = Math.trunc(umSexto * 3 / 6);
+	
+	if(this.ateAgr.length == 0) mostrar("<li>Sem agravantes ou atenunantes.</li>");
+	for (let ateAgr of this.ateAgr) {
+	//MathTrunc
+	  let meses = Math.floor(ateAgr.peso*(umSexto/6)*3)/3;
+	  base.addMeses(meses);
+	  console.log(meses);
+	  if(meses>0)
+	  {
+		mostrar("<li>Agravante de "+ ateAgr.nome + " (" + ateAgr.valor()+") adicionando " + (new Tempo(0,meses)).string() + " à pena, resultando em " + base.string()+".</li>");
+	  }
+	  else
+	  {
+		mostrar("<li>Atenuante de "+ ateAgr.nome + " (" + ateAgr.valor()+") retirando " + (new Tempo(0,-meses)).string() + " à pena, resultando em " + base.string()+".</li>");
+	  }
+	}
+	
+	if(this.tipo.min.tempo>base.tempo)
+	{
+		base.tempo = this.tipo.min.tempo;
+		mostrar("<li>Todavia, na 2ª fase, deve ser respeitada a pena mínima de "+ base.string() +"</li>");
+	}
+	if(this.tipo.max.tempo<base.tempo)
+	{
+		base.tempo = this.tipo.max.tempo;
+		mostrar("<li>Todavia, na 2ª fase, deve ser respeitada a pena máxima de "+ base.string() +"</li>");
+	}
+	
+	mostrar("<li><strong>Pena provisória fixada em "+ base.string()+".</strong></li>");
+	//mostrar("<h5>3ª Fase:</h5>");
+	return base;
+  }
+  
+  penaDefinitiva()
+  {
+	let prov = this.penaProvisoria();
+	
+	let neg = this.circunstancias.negativas();
+	if(this.minMaj.length == 0) mostrar("<li>Sem majorante ou minorantes.</li>");
+	for (let minMaj of this.minMaj) {
+	  let frac = minMaj.valorPeso(neg);
+	  let meses = (prov.mesesTotal()*(minMaj.peso(neg)/12));
+	  prov.addMeses(meses);
+	  console.log(frac);
+	  if(frac.includes("-"))
+	  {
+		mostrar("<li>Minorante de "+ minMaj.nome + " reduzindo a pena em " + (new Tempo(0,-meses)).string() + " ("+frac+"), resultando em " + prov.string()+".</li>");
+	  }
+	  else
+	  {
+		mostrar("<li>Majorante de "+ minMaj.nome + " aumentando a pena em " + (new Tempo(0,meses)).string() + " ("+frac+"), resultando em " + prov.string()+".</li>");
+	  }
+	}
+	mostrar("<li><strong>Pena definitiva fixada em "+ prov.string()+".</strong></li>");
+	html("<h4>Pena: "+ prov.string() +"</h4>", "#penaFinal", true);
+	return prov;
+  }
+  
+  
+}
+class Circunstancias extends Array{
+  negativas() {
+	let neg = 0;
+	for(let x in this)
+	{
+		if(this[x]==-1)neg++;
+	}
+	
+    return neg;
+  }
+}
+class Tipo {
+  constructor(min, max, nome="") {
+    this.min = min;
+	this.max = max;
+	this.nome = nome;
+  }
+  termoMedio()
+  {
+	return new Tempo((this.min.anosTotal() + this.max.anosTotal())/2);
+  }
+  umOitavo()
+  {
+	return new Tempo((this.termoMedio().anosTotal() - this.min.anosTotal())/8);
+  }
+}
+class AteAgr {
+  constructor(peso=1, nome="") {
+	this.peso = peso;
+	this.nome = nome;
+  }
+  valor()
+  {
+	switch(this.peso)
+	{
+	case 3:
+	case -3:
+	return "comum";
+	case 5:
+	case -5:
+	return "preponderante";
+	case 6:
+	case -6:
+	return "super preponderante";
+	}
+  }
+   categoria()
+  {
+	if(this.peso<0)
+	return "atenuante";
+	else
+	return "agravante";
+  }
+  
+}
+class MinMaj {
+  constructor(min, max=0, nome="", calc=true) {
+    this.min = min;
+	this.max = max;
+	this.nome = nome;
+	this.calc = calc;
+	/*
+	tudo sobre 12
+	1/6 = 2/12
+	1/6, 1/3, 1/2, 2/3, 2, 3
+	*/
+  }
+  
+  humanize(texto)
+  {
+	texto = math.simplify(texto).toString().replace(" / ","/");
+	if(texto=="1") texto="dobro";
+	if(texto=="2") texto="triplo";
+	return texto;
+  }
+  minimo()
+  {
+	return this.humanize(this.min+"/12");
+  }
+  
+  maximo()
+  {
+	return this.humanize(this.max+"/12");
+  }
+    
+  valorPeso(culp)
+  {
+	return this.humanize(this.peso(culp)+"/12");
+  }
+  
+  calcCulp(culp)
+	{
+	 return Math.trunc(culp/3.0 + 1);
+	}
+	
+	
+  peso(culp)
+  {
+	if(this.max == 0 || this.max==this.min)
+	return this.min;
+	if(this.calc===true){
+		culp = this.calcCulp(culp);
+	}
+	else{
+		culp = this.calc;
+		}
+	switch (culp)
+	{
+		case '1':
+		return this.min;
+		
+		case '2':
+		return Math.round((this.max+this.min)/2);
+		
+		case '3':
+		return this.max;
+	
+	}
+	return;
+  }
+	categoria()
+  {
+	if(this.min<0)
+	return "minorante";
+	else
+	return "majorante";
+  }  
+	
+  
+}
+
+</script>
+</head>
+
+<body data-bs-theme="dark">
+<div class="container-xl">
+	<br/>
+		<h2 class="text-center">Calculadora para dosimetria</h2>
+		<h5 class="text-end">Feito por <a href="http://lattes.cnpq.br/6702944102751831">Daniel Millan</a></h5>
+	<br/>
+	<div class="accordion" id="painel" data-bs-theme="light">
+	  <div class="accordion-item">
+		<h2 class="accordion-header">
+		  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseZero" aria-expanded="true" aria-controls="panelsStayOpen-collapseZero">
+		   <h5> Intervalo (tipificação e qualificadoras) </h5>
+		  </button>
+		</h2>
+		<div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show">
+		  <div class="accordion-body row">
+			<div class="input-group col">
+			  <span class="input-group-text">Crime</span>
+			  <input type="text" class="form-control" id="nomeTipo" type="text">
+			</div>
+			<div class="input-group col">
+			  <span class="input-group-text">Min</span>
+			  <input class="form-control" id="minN" value="1" min="1" max="999" type="number">
+			  <span class="input-group-text"><select id="minMedida" class="form-select"><option value="12">Anos</option><option value="1">Meses</option></select></span>
+			</div>
+			<div class="input-group col">
+			  <span class="input-group-text">Max</span>
+			  <input class="form-control" min="1" id="maxN" value="1" max="999" type="number">
+			  <span class="input-group-text"><select id="maxMedida" class="form-select"><option value="12">Anos</option><option value="1">Meses</option></select></span>
+			</div>
+	  </div>
+	  </div>
+	  </div>
+	  
+	  <div class="accordion-item">
+		<h2 class="accordion-header">
+		  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+		   <h5> 1ª fase (circunstâncias judiciais) </h5>
+		  </button>
+		</h2>
+		<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+		  <div class="accordion-body">
+			<div class="container text-center">
+			  <div class="row align-items-start">
+			  
+				<div class="col row">
+				<div class="col">
+					<label for="ant" class="form-label">Antecedentes</label>
+					<select class="form-select" id="ant">
+						<option value="X" selected>Não avaliado</option>
+						<option value="-1">Negativo</option>
+						<option value="0">Neutro</option>
+						<option value="1">Positivo</option>
+					  </select></br>
+				</div>
+				<div class="col">
+					<label for="conSoc" class="form-label">Conduta social</label>
+					<select class="form-select" id="conSoc">
+						<option value="X" selected>Não avaliado</option>
+						<option value="-1">Negativo</option>
+						<option value="0">Neutro</option>
+						<option value="1">Positivo</option>
+					  </select></br>
+				</div></div>
+				<div class="col row">
+				<div class="col">
+					<label for="circ" class="form-label">Circunstâncias</label>
+					<select class="form-select" id="circ">
+						<option value="X" selected>Não avaliado</option>
+						<option value="-1">Negativo</option>
+						<option value="0">Neutro</option>
+						<option value="1">Positivo</option>
+					  </select></br>
+				</div>
+				<div class="col">
+					<label for="conseq" class="form-label">Consequências</label>
+					<select class="form-select" id="conseq">
+						<option value="X" selected>Não avaliado</option>
+						<option value="-1">Negativo</option>
+						<option value="0">Neutro</option>
+						<option value="1">Positivo</option>
+					  </select></br>
+				</div></div>
+				
+			  </div>
+			<div class="row align-items-start">
+				<div class="col row">
+				<div class="col">
+					<label for="culp" class="form-label">Culpabilidade</label>
+					<select class="form-select" id="culp">
+						<option value="X" selected>Não avaliado</option>
+						<option value="-1">Negativo</option>
+						<option value="0">Neutro</option>
+						<option value="1">Positivo</option>
+					  </select></br>
+				</div>
+				<div class="col">
+					<label for="mot" class="form-label">Motivos</label>
+					<select class="form-select" id="mot">
+						<option value="X" selected>Não avaliado</option>
+						<option value="-1">Negativo</option>
+						<option value="0">Neutro</option>
+						<option value="1">Positivo</option>
+					  </select></br>
+				</div></div>
+				
+				<div class="col row">
+				<div class="col">
+					<label for="pers" class="form-label">Personalidade</label>
+					<select class="form-select" id="pers">
+						<option value="X" selected>Não avaliado</option>
+						<option value="-1">Negativo</option>
+						<option value="0">Neutro</option>
+						<option value="1">Positivo</option>
+					  </select></br>
+				</div>
+				<div class="col">
+					<label for="colVit" class="form-label">Colab. vítima</label>
+					<select class="form-select" id="colVit">
+						<option value="X" selected>Não avaliado</option>
+						<option value="-1">Negativo</option>
+						<option value="0">Neutro</option>
+						<option value="1">Positivo</option>
+					  </select></br>
+				</div></div>
+			  </div>
+			 </div>
+			</div>		  
+		  </div>
+		</div>
+	  
+	  <div class="accordion-item">
+		<h2 class="accordion-header">
+		  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+		   <h5> 2ª fase (agravantes e atenuantes) </h5>
+		  </button>
+		</h2>
+		<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+		  <div class="accordion-body">
+			<div class="row">
+			<div class="input-group col">
+			  <span class="input-group-text">Nome</span>
+			  <input type="text" class="form-control" id="nomeAteAgr" type="text">
+			  </div>
+			<div class="input-group col">
+			  <select id="nAteAgr" class="form-select">
+			  <option value="1">Agravante</option>
+			  <option value="-1">Atenuante</option>
+			  </select>
+			</div>
+			<div class="input-group col">
+			  <span class="input-group-text">Peso</span>
+			  <select id="pesoAteAgr" class="form-select">
+			  <option value="3">Comum</option>
+			  <option value="5">Preponderante</option>
+			  <option value="6">Super preponderante</option>
+			  </select>
+			</div>
+			</div>
+			<br><div class="text-center">
+			<button type="button" id="btnAddAteAgr" onclick="addAteAgr(this)" class="mx-auto btn btn-info">Adicionar</button>			
+			</div>
+			<table class="table">
+			  <thead>
+				<tr>
+				  <th scope="col">Nome</th>
+				  <th scope="col">Categoria</th>
+				  <th scope="col">Valor</th>
+				  <th scope="col">Excluir</th>
+				</tr>
+			  </thead>
+			  <tbody id="tbAteAgr">
+			  </tbody>
+			</table>
+			</div>
+		  </div>
+		</div>
+		
+	  <div class="accordion-item">
+		<h2 class="accordion-header">
+		  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+		   <h5>3ª fase (majorantes e minorantes)</h5>
+		  </button>
+		</h2>
+		<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+		  <div class="accordion-body">
+			<div class="row">
+			<div class="input-group col">
+			  <span class="input-group-text">Nome</span>
+			  <input type="text" class="form-control" id="nomeMinMaj" type="text">
+			</div>
+			<div class="input-group col">
+			  <select id="nMinMaj" class="form-select">
+			  <option value="1">Majorante</option>
+			  <option value="-1">Minorante</option>
+			  </select>
+			</div>
+			<div class="col">
+			  <div class="input-group">
+			  <span class="input-group-text">Min&nbsp;</span>
+			  <select id="minMinMaj" class="form-select">
+			  <option value="2">Um sexto (1/6)</option>
+			  <option value="4">Um terço (1/3)</option>
+			  <option value="6">Metade (1/2)</option>
+			  <option value="8">Dois terços (2/3)</option>
+			  <option value="12">Dobro (2)</option>
+			  <option value="24">Triplo (3)</option>
+			  </select></div>
+			  <div class="input-group">
+			  <span class="input-group-text">Max</span>
+			  <select id="maxMinMaj" class="form-select">
+			  <option selected value="0">Não se aplica</option>
+			  <option value="2">Um sexto (1/6)</option>
+			  <option value="4">Um terço (1/3)</option>
+			  <option value="6">Metade (1/2)</option>
+			  <option value="8">Dois terços (2/3)</option>
+			  <option value="12">Dobro</option>
+			  <option value="24">Triplo</option>
+			  </select></div>
+			</div>
+			<div class="input-group col">
+			  <span class="input-group-text">Grau</span>
+			  <select id="calcMinMaj" class="form-select">
+			  <option selected value="0">Não se aplica</option>
+			  <option value="1">Menor</option>
+			  <option value="2">Médio</option>
+			  <option value="3">Maior</option>
+			  </select>
+			</div>
+			</div>
+			
+			<br><div class="text-center">
+			<button type="button" id="btnAddMinMaj" onclick="addMinMaj(this)" class="mx-auto btn btn-info">Adicionar</button>			
+			</div>
+			<table class="table">
+			  <thead>
+				<tr>
+				  <th scope="col">Nome</th>
+				  <th scope="col">Categoria</th>
+				  <th scope="col">Valor</th>
+				  <th scope="col">Excluir</th>
+				</tr>
+			  </thead>
+			  <tbody id="tbMinMaj">
+			  </tbody>
+			</table>
+			
+			
+		  </div>
+		</div>
+	  </div>	  
+	</div>
+	<br>
+	<button type="button" onclick="calcular()" class="mx-auto btn btn-primary  btn-lg">Calcular</button>
+	<hr>
+	
+	<div  class="container-xl" data-bs-theme="light">
+	<ol id = "resultado"></ol>
+	<span id="penaFinal"></span>
+	</div>
+	
+</div>
+<script>
+const crime = new Crime(null, new Circunstancias(), [],[]);
+function mostrar(string, substituir = false)
+{
+	html(string, "#resultado", substituir);
+}
+
+function html(string, identificador, substituir=false)
+{
+	if(!substituir) $(identificador).append(string);
+	else $(identificador).html(string);
+}
+
+function addAteAgr(e)
+{
+	crime.ateAgr.push(new AteAgr((pesoAteAgr.value*nAteAgr.value), nomeAteAgr.value));
+	mostraAteAgr();
+	nomeAteAgr.value = "";
+}
+
+function delAteAgr(e)
+{
+	console.log(e);
+	crime.ateAgr.splice(e.value, 1);
+	mostraAteAgr();
+}
+
+function mostraAteAgr()
+{
+	let conteudo = "";
+	for (let i in crime.ateAgr) {
+		conteudo+="<tr><th>"+crime.ateAgr[i].nome+"</th><td>"+crime.ateAgr[i].categoria()+"</td><td>"+crime.ateAgr[i].valor()+"</td><td><button value='"+i+"'class='btn btn-danger btn-sm'>X</button></td></tr>"
+	}
+	html(conteudo, "#tbAteAgr", true)
+	$("#tbAteAgr button").click((e) => delAteAgr(e));
+}
+
+function addMinMaj(e)
+{
+	x = new MinMaj((minMinMaj.value * nMinMaj.value), (maxMinMaj.value * nMinMaj.value), nomeMinMaj.value);
+	if(calcMinMaj.value != 0)
+		x.calc = calcMinMaj.value;
+	crime.minMaj.push(x);
+	mostraMinMaj();
+	nomeMinMaj.value = "";
+}
+
+function delMinMaj(e)
+{
+	console.log(e);
+	crime.minMaj.splice(e.value, 1);
+	mostraMinMaj();
+}
+
+
+function mostraMinMaj()
+{
+	let conteudo = "";
+	for (let i in crime.minMaj) {
+		let valorMinMaj = ""+crime.minMaj[i].minimo();
+		if(crime.minMaj[i].maximo()!=0)valorMinMaj+=" ~ "+crime.minMaj[i].maximo();
+		conteudo+="<tr><th>"+crime.minMaj[i].nome+"</th><td>"+crime.minMaj[i].categoria()+"</td><td>"+valorMinMaj+"</td><td><button value='"+i+"'class='btn btn-danger btn-sm'>X</button></td></tr>"
+	}
+	html(conteudo, "#tbMinMaj", true)
+	$("#tbMinMaj button").click((e) => delMinMaj(e));
+}
+
+function calcular(e)
+{
+	preparaTipo();
+	preparaCirc();
+	crime.penaDefinitiva();
+}
+
+function preparaTipo()
+{
+	crime.tipo = new Tipo(new Tempo(0,minMedida.value*minN.value), new Tempo(0,maxMedida.value*maxN.value), nomeTipo.value);
+}
+
+function preparaCirc()
+{
+	crime.circunstancias = new Circunstancias();
+	crime.circunstancias["antecedentes"] = ant.value;
+	crime.circunstancias["conduta social"] = conSoc.value;
+	crime.circunstancias["circunstâncias"] = circ.value;
+	crime.circunstancias["culpabilidade"] = culp.value;
+	crime.circunstancias["motivo"] = mot.value;
+	crime.circunstancias["consequências"] = conseq.value;
+	crime.circunstancias["personalidade"] = pers.value;
+	crime.circunstancias["colaboração da vítima"] = colVit.value;
+}
+
+
+</script>
+<body>
+</html>
