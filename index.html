@@ -138,7 +138,7 @@ class Crime {
 	let prov = this.penaProvisoria();
 	
 	let neg = this.circunstancias.negativas();
-	if(this.minMaj.length == 0) mostrar("<li>Sem majorante ou minorantes.</li>");
+	if(this.minMaj.length == 0) mostrar("<li>Sem majorantes ou minorantes.</li>");
 	for (let minMaj of this.minMaj) {
 	  let frac = minMaj.valorPeso(neg);
 	  let meses = (prov.mesesTotal()*(minMaj.peso(neg)/12));
@@ -549,10 +549,10 @@ class MinMaj {
 	<button type="button" onclick="calcular()" class="mx-auto btn btn-primary  btn-lg">Calcular</button>
 	<hr>
 	
-	<div  class="container-xl" data-bs-theme="light">
+	<div class="accordion d-none" data-bs-theme="light"><div class="accordion-item row"><div class="accordion-body row">
 	<ol id = "resultado"></ol>
 	<span id="penaFinal"></span>
-	</div>
+	</div></div></div>
 	
 </div>
 <script>
@@ -624,6 +624,7 @@ function mostraMinMaj()
 
 function calcular(e)
 {
+	$(".d-none").removeClass("d-none");
 	preparaTipo();
 	preparaCirc();
 	crime.penaDefinitiva();
