@@ -107,6 +107,7 @@ class Crime {
 	for (let ateAgr of this.ateAgr) {
 	//MathTrunc
 	  let meses = Math.floor(ateAgr.peso*(umSexto/6)*3)/3;
+	  if(meses>umSexto) meses=umSexto;
 	  base.addMeses(meses);
 	  console.log(meses);
 	  if(meses>0)
@@ -178,7 +179,7 @@ class Circunstancias extends Array{
 		for(let x in this)
 		{
 			if(this[x]==-1)texto.push("\"<i>"+x+"\"</i> foi avaliado como negativo");
-			else if(this[x]==1)texto.push("\"<i>"+x+"\"</i> foi avaliado como negativo");
+			else if(this[x]==1)texto.push("\"<i>"+x+"\"</i> foi avaliado como positivo");
 			else if(this[x]==0)texto.push("\"<i>"+x+"\"</i> foi avaliado como neutro");
 			else texto.push("\"<i>"+x+"\"</i> não foi avaliado");
 		}		
