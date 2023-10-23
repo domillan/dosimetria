@@ -88,7 +88,7 @@ class Crime {
 	let oitavo = this.tipo.umOitavo();
 	let tempo = new Tempo(min.anosTotal() + (neg * oitavo.anosTotal()));
 	mostrar("<li>Na 1ª fase, "+this.circunstancias.descrever()+"</li>");
-	mostrar("<li>Pena entre mínimo de " + min.string() + " e termo médio de " + this.tipo.termoMedio().string() + ", acrescentando " + oitavo.string() + " para cada uma das " + neg +" circunstâncias negativas.</li>");
+	mostrar("<li>Pena entre mínima de " + min.string() + " e termo médio de " + this.tipo.termoMedio().string() + ", acrescentando " + oitavo.string() + " para cada uma das " + neg +" circunstâncias negativas.</li>");
 	mostrar("<li><strong>Pena-base fixada em "+ tempo.string()+".</strong></li>");
 	//mostrar("<h5>2ª Fase:</h5>");
 	
