@@ -280,19 +280,27 @@ class MinMaj {
 	else{
 		culp = this.calc;
 		}
+	if(this.min<0)
 	switch (culp)
 	{
-		case '1':
+		case 3:
 		return this.min;
-		
-		case '2':
+		case 2:
 		return Math.round((this.max+this.min)/2);
-		
-		case '3':
+		case 1:
 		return this.max;
-	
 	}
-	return;
+	else
+	switch (culp)
+	{
+		case 1:
+		return this.min;
+		case 2:
+		return Math.round((this.max+this.min)/2);
+		case 3:
+		return this.max;
+	}
+	return this.min;
   }
 	categoria()
   {
