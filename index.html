@@ -106,8 +106,8 @@ class Crime {
 	if(this.ateAgr.length == 0) mostrar("<li>Sem agravantes ou atenuantes.</li>");
 	for (let ateAgr of this.ateAgr) {
 	//MathTrunc
-	  let meses = Math.floor(ateAgr.peso*(umSexto/6)*3)/3;
-	  if(meses>umSexto) meses=umSexto;
+	  let meses = Math.trunc(ateAgr.peso*(umSexto/6)*3)/3;
+
 	  base.addMeses(meses);
 	  console.log(meses);
 	  if(meses>0)
