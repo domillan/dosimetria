@@ -627,6 +627,7 @@ function delMinMaj(e)
 function mostraMinMaj()
 {
 	let conteudo = "";
+	crime.minMaj.sort((a,b)=>{return a.min-b.min;});
 	for (let i in crime.minMaj) {
 		let valorMinMaj = ""+crime.minMaj[i].minimo();
 		if(crime.minMaj[i].maximo()!=0)valorMinMaj+=" ~ "+crime.minMaj[i].maximo();
