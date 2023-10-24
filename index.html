@@ -394,7 +394,7 @@ class MinMaj {
 			  
 				<div class="col row">
 				<div class="col">
-					<label for="ant" class="form-label">Antecedentes</label>
+					<label for="ant" class="form-label">Antecedentes<button value="ant" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="ant">
 						<option value="X" selected>Não avaliado</option>
 						<option value="-1">Negativo</option>
@@ -403,7 +403,7 @@ class MinMaj {
 					  </select></br>
 				</div>
 				<div class="col">
-					<label for="conSoc" class="form-label">Conduta social</label>
+					<label for="conSoc" class="form-label">Conduta social<button value="conSoc" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="conSoc">
 						<option value="X" selected>Não avaliado</option>
 						<option value="-1">Negativo</option>
@@ -413,7 +413,7 @@ class MinMaj {
 				</div></div>
 				<div class="col row">
 				<div class="col">
-					<label for="circ" class="form-label">Circunstâncias</label>
+					<label for="circ" class="form-label">Circunstâncias<button value="circ" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="circ">
 						<option value="X" selected>Não avaliado</option>
 						<option value="-1">Negativo</option>
@@ -422,7 +422,7 @@ class MinMaj {
 					  </select></br>
 				</div>
 				<div class="col">
-					<label for="conseq" class="form-label">Consequências</label>
+					<label for="conseq" class="form-label">Consequências<button value="cons" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="conseq">
 						<option value="X" selected>Não avaliado</option>
 						<option value="-1">Negativo</option>
@@ -435,7 +435,7 @@ class MinMaj {
 			<div class="row align-items-start">
 				<div class="col row">
 				<div class="col">
-					<label for="culp" class="form-label">Culpabilidade</label>
+					<label for="culp" class="form-label">Culpabilidade<button value="culp" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="culp">
 						<option value="X" selected>Não avaliado</option>
 						<option value="-1">Negativo</option>
@@ -444,7 +444,7 @@ class MinMaj {
 					  </select></br>
 				</div>
 				<div class="col">
-					<label for="mot" class="form-label">Motivos</label>
+					<label for="mot" class="form-label">Motivos<button value="mot" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="mot">
 						<option value="X" selected>Não avaliado</option>
 						<option value="-1">Negativo</option>
@@ -455,7 +455,7 @@ class MinMaj {
 				
 				<div class="col row">
 				<div class="col">
-					<label for="pers" class="form-label">Personalidade</label>
+					<label for="pers" class="form-label">Personalidade<button value="pers" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="pers">
 						<option value="X" selected>Não avaliado</option>
 						<option value="-1">Negativo</option>
@@ -464,7 +464,7 @@ class MinMaj {
 					  </select></br>
 				</div>
 				<div class="col">
-					<label for="colVit" class="form-label">Colab. vítima</label>
+					<label for="colVit" class="form-label">Colab. vítima<button value="colVit" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="colVit">
 						<option value="X" selected>Não avaliado</option>
 						<option value="-1">Negativo</option>
@@ -613,14 +613,7 @@ class MinMaj {
 </div>
 <script crossorigin="anonymous|use-credentials">
 const crime = new Crime(null, new Circunstancias(), [],[]);
-var infos /*={
-'grau':'No campo "Grau", você pode selecionar quanto a majorante/minorante incidirá sobre a pena, determinando se isso irá alterá-la no patamar mínimo, médio ou máximo dentro do intervalo. Esse campo pode ser marcado como "Não se aplica" em casos que não há intervalo ou quando será usado o critério padrão.',
-'tipo':'Inicialmente você deve informar o crime pelo qual o réu será condenado, incluindo eventual qualificadora. Informe também as penas mínima e máxima definidas no texto legal.',
-'fase1':'Na 1ª fase, serão avaliadas as circunstâncias judiciais do crime, nos termos do art. 59 do Código Penal. Para isso, avalie cada uma das 8 circuntâncias para cálculo da pena-base conforme a regra do 1/8.',
-'fase2':'Na 2ª fase, serão julgadas eventuais agravantes ou atenuantes que se apliquem ao caso, nos termos do art. 61 a 67 do Código Penal. Para isso, adicione as agravantes/atenuantes que forem necessárias, informando se são comuns, preponderantes ou super preponderantes.',
-'fase3':'Na 3ª fase, serão julgadas eventuais majorantes (causas de aumento de pena) ou minorantes (causas de redução de pena) que se apliquem ao caso. Para isso, adicione as majorantes/minorantes que forem necessárias, informando as frações ou intervalos definidos em lei.'
-}*/;
-
+var infos;
 
 $(document).ready(function(){$.get( "https://domillan.github.io/dosimetria/info.json", (data)=>{infos = data;})});
 
