@@ -7,6 +7,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.2/math.js"></script>
+<style>
+.bt-info
+{
+ --bs-btn-padding-y: .05rem;
+ --bs-btn-padding-x: .4rem;
+ --bs-btn-font-size: .7rem;
+ margin-left: 0.3rem;
+}
+</style>
 
 <script>
 
@@ -270,47 +279,59 @@ class MinMaj {
 	 return Math.trunc(culp/3.0 + 1);
 	}
 	
-	
+  calcPeso(culp, x=false)
+  {
+	switch (culp)
+	{
+		case 1:
+		case -1:
+		case '1':
+			if(this.min>=0 || x) return this.min;
+			else return this.max;
+		case 2:
+		case -2:
+		case '2':
+			return Math.round((this.max+this.min)/2);
+		case 3:
+		case -3:
+		case '3':
+			if(this.min>=0 || x) return this.max;
+			else return this.min;
+	}
+	return this.min;
+  }
+  
   peso(culp)
   {
 	if(this.max == 0 || this.max==this.min)
 	return this.min;
+	
 	if(this.calc===true){
 		culp = this.calcCulp(culp);
-	}
-	else{
-		culp = this.calc;
-		}
-	if(this.min<0)
-	switch (culp)
-	{
-		case 3:
-		return this.min;
-		case 2:
-		return Math.round((this.max+this.min)/2);
-		case 1:
-		return this.max;
+		return this.calcPeso(culp);
 	}
 	else
-	switch (culp)
 	{
-		case 1:
-		return this.min;
-		case 2:
-		return Math.round((this.max+this.min)/2);
-		case 3:
-		return this.max;
+		culp = this.calc;
+		return this.calcPeso(culp, true)
 	}
-	return this.min;
   }
-	categoria()
+  
+  categoria()
   {
 	if(this.min<0)
 	return "minorante";
 	else
 	return "majorante";
   }  
-	
+  
+  grau()
+  {
+	if(this.calc===true)	return "";
+	if(this.calc == '1')	return "(mínimo)";
+	if(this.calc == '2')	return "(médio)";
+	if(this.calc == '3')	return "(máximo)";
+  }  
   
 }
 
@@ -318,7 +339,13 @@ class MinMaj {
 </head>
 
 <body data-bs-theme="dark">
-<div class="container-xl">
+
+<div id="aviso" style="width:92%" class="invisible z-3 position-fixed bottom-0 bg-gradient container-fluid mt-5 mx-5 mb-3 bg-secondary  border border-white rounded"><div class="position-relative container-sm text-justify p-3">
+<span id="avisoContent"></span>
+</div>
+<button id="fechaAviso" class="btn btn-md rounded position-absolute top-0 end-0">X</button>
+</div>
+<div id="cont" class="z-1 container-xl">
 	<br/>
 		<h2 class="text-center">Calculadora para dosimetria</h2>
 		<h5 class="text-end">Feito por <a href="http://lattes.cnpq.br/6702944102751831">Daniel Millan</a></h5>
@@ -327,13 +354,16 @@ class MinMaj {
 	  <div class="accordion-item">
 		<h2 class="accordion-header">
 		  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseZero" aria-expanded="true" aria-controls="panelsStayOpen-collapseZero">
-		   <h5> Intervalo (tipificação e qualificadoras) </h5>
+		   <h5> Crime (tipificação e qualificadoras)</h5>
 		  </button>
 		</h2>
 		<div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show">
+		<button value="tipo" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button>
 		  <div class="accordion-body row">
 			<div class="input-group col">
-			  <span class="input-group-text">Crime</span>
+			  <span class="input-group-text">
+			  Crime
+			  </span>
 			  <input type="text" class="form-control" id="nomeTipo" type="text">
 			</div>
 			<div class="input-group col">
@@ -357,6 +387,7 @@ class MinMaj {
 		  </button>
 		</h2>
 		<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+		<button value="fase1" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button>
 		  <div class="accordion-body">
 			<div class="container text-center">
 			  <div class="row align-items-start">
@@ -454,6 +485,7 @@ class MinMaj {
 		  </button>
 		</h2>
 		<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+		<button value="fase2" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button>
 		  <div class="accordion-body">
 			<div class="row">
 			<div class="input-group col">
@@ -500,7 +532,8 @@ class MinMaj {
 		   <h5>3ª fase (majorantes e minorantes)</h5>
 		  </button>
 		</h2>
-		<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+		<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">		
+		<button value="fase3" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button>
 		  <div class="accordion-body">
 			<div class="row">
 			<div class="input-group col">
@@ -537,7 +570,7 @@ class MinMaj {
 			  </select></div>
 			</div>
 			<div class="input-group col">
-			  <span class="input-group-text">Grau</span>
+			  <span class="input-group-text">Grau<button value="grau" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></span>
 			  <select id="calcMinMaj" class="form-select">
 			  <option selected value="0">Não se aplica</option>
 			  <option value="1">Mínimo</option>
@@ -578,8 +611,29 @@ class MinMaj {
 	</div></div></div>
 	
 </div>
-<script>
+<script crossorigin="anonymous|use-credentials">
 const crime = new Crime(null, new Circunstancias(), [],[]);
+var infos /*={
+'grau':'No campo "Grau", você pode selecionar quanto a majorante/minorante incidirá sobre a pena, determinando se isso irá alterá-la no patamar mínimo, médio ou máximo dentro do intervalo. Esse campo pode ser marcado como "Não se aplica" em casos que não há intervalo ou quando será usado o critério padrão.',
+'tipo':'Inicialmente você deve informar o crime pelo qual o réu será condenado, incluindo eventual qualificadora. Informe também as penas mínima e máxima definidas no texto legal.',
+'fase1':'Na 1ª fase, serão avaliadas as circunstâncias judiciais do crime, nos termos do art. 59 do Código Penal. Para isso, avalie cada uma das 8 circuntâncias para cálculo da pena-base conforme a regra do 1/8.',
+'fase2':'Na 2ª fase, serão julgadas eventuais agravantes ou atenuantes que se apliquem ao caso, nos termos do art. 61 a 67 do Código Penal. Para isso, adicione as agravantes/atenuantes que forem necessárias, informando se são comuns, preponderantes ou super preponderantes.',
+'fase3':'Na 3ª fase, serão julgadas eventuais majorantes (causas de aumento de pena) ou minorantes (causas de redução de pena) que se apliquem ao caso. Para isso, adicione as majorantes/minorantes que forem necessárias, informando as frações ou intervalos definidos em lei.'
+}*/;
+
+
+$(document).ready(function(){$.get( "https://domillan.github.io/dosimetria/info.json", (data)=>{infos = data;})});
+
+$("#fechaAviso").click((e) => {$('#aviso').addClass('invisible')});
+$(".bt-info").click((e) => aviso(e));
+
+function aviso(e)
+{
+	html(infos[e.currentTarget.value], '#avisoContent', true);
+	$('#aviso').removeClass('invisible');
+	$(e.target).addClass('z-1');
+}
+
 function mostrar(string, substituir = false)
 {
 	html(string, "#resultado", substituir);
@@ -636,11 +690,11 @@ function delMinMaj(e)
 function mostraMinMaj()
 {
 	let conteudo = "";
-	crime.minMaj.sort((a,b)=>{return a.min-b.min;});
+	//crime.minMaj.sort((a,b)=>{return a.min-b.min;});
 	for (let i in crime.minMaj) {
 		let valorMinMaj = ""+crime.minMaj[i].minimo();
 		if(crime.minMaj[i].maximo()!=0)valorMinMaj+=" ~ "+crime.minMaj[i].maximo();
-		conteudo+="<tr><th>"+crime.minMaj[i].nome+"</th><td>"+crime.minMaj[i].categoria()+"</td><td>"+valorMinMaj+"</td><td><button value='"+i+"'class='btn btn-danger btn-sm'>X</button></td></tr>"
+		conteudo+="<tr><th>"+crime.minMaj[i].nome+"</th><td>"+crime.minMaj[i].categoria()+"</td><td>"+valorMinMaj+" <small class='text-secondary'>"+crime.minMaj[i].grau()+"</small></td><td><button value='"+i+"'class='btn btn-danger btn-sm'>X</button></td></tr>"
 	}
 	html(conteudo, "#tbMinMaj", true)
 	$("#tbMinMaj button").click((e) => delMinMaj(e));
@@ -652,6 +706,8 @@ function calcular(e)
 	preparaTipo();
 	preparaCirc();
 	crime.penaDefinitiva();
+	let pos = $("#resultado").offset().top;
+    $('body, html').animate({scrollTop: pos});
 }
 
 function preparaTipo()
