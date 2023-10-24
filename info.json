@@ -2,6 +2,14 @@
 "grau":"No campo \"Grau\", você pode selecionar quanto a majorante/minorante incidirá sobre a pena, determinando se isso irá alterá-la no patamar mínimo, médio ou máximo dentro do intervalo. Esse campo pode ser marcado como \"Não se aplica\" em casos que não há intervalo ou quando será usado o critério padrão.",
 "tipo":"Inicialmente você deve informar o crime pelo qual o réu será condenado, incluindo eventual qualificadora. Informe também as penas mínima e máxima definidas no texto legal.",
 "fase1":"Na 1ª fase, serão avaliadas as circunstâncias judiciais do crime, nos termos do art. 59 do Código Penal. Para isso, avalie cada uma das 8 circuntâncias para cálculo da pena-base conforme a regra do 1/8.",
+"ant":"Considera-se \"Antecedentes\" a vida pregressa do autor em matéria criminal. Devem ser valoradas somente as condenações transitadas em julgado e não deve ocorrer <i>bis in idem</i> com a majorante de reincidência.",
+"conSoc":"Considera-se \"Consuta social\" o papel do réu na comunidade, trabalho, vizinhança, etc. Normalmente avaliado através de testemunhas abonatórias ou desabonadtórias.",
+"circ":"Considera-se \"Circunstâncias\" os elementos do delito que não sejam necessários ao tipo. Necessita de atenção para não ocorrer <i>bis in idem</i>.",
+"cons":"Considera-se \"Consequências\" os resultados causados pelo delito que não sejam típicos do crime.",
+"culp":"Considera-se \"Culpabilidade\" a reprovação social que o crime e o autor do fato merecem.",
+"mot":"Considera-se \"Motivos\" as motivações subjetivas do agente que levaram à ação criminosa. Necessita de atenção para não ocorrer <i>bis in idem</i>.",
+"pers":"Considera-se \"Personalidade\" o conjunto de elementos psicológicos do agente voltado ao comportamento criminoso. Deve ser valorado somente se houver laudo técnico nesse sentido.",
+"colVit":"Considera-se \"Colaboração da vítima\" o modo de agir da vítima que pode levar ao crime. Deve ser valorado somente se a vítima, de algum modo, provocou o delito e se possuía uma relação prévia com o agente.",
 "fase2":"Na 2ª fase, serão avaliadas eventuais agravantes ou atenuantes que se apliquem ao caso, nos termos do art. 61 a 67 do Código Penal. Para isso, adicione as agravantes/atenuantes que forem necessárias, informando se são comuns, preponderantes ou super preponderantes.",
 "fase3":"Na 3ª fase, serão avaliadas eventuais majorantes (causas de aumento de pena) ou minorantes (causas de redução de pena) que se apliquem ao caso. Para isso, adicione as majorantes/minorantes que forem necessárias, informando as frações ou intervalos definidos em lei."
 }
