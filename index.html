@@ -15,6 +15,16 @@
  --bs-btn-font-size: .7rem;
  margin-left: 0.3rem;
 }
+
+.invisible
+{
+ opacity: 0;
+ transition:visibility 0.2s linear, opacity 0.2s linear;
+}
+
+.accordion-button:focus{
+  z-index:2;
+}
 </style>
 
 <script>
@@ -619,6 +629,7 @@ var infos;
 
 $(document).ready(function(){$.get( "https://domillan.github.io/dosimetria/info.json", (data)=>{infos = data;})});
 
+$("select, button, input").click((e) => {$('#aviso').addClass('invisible')});
 $("#fechaAviso").click((e) => {$('#aviso').addClass('invisible')});
 $(".bt-info").click((e) => aviso(e));
 
