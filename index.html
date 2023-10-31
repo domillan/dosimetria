@@ -350,17 +350,20 @@ class MinMaj {
 
 <body data-bs-theme="dark">
 
-<div id="aviso" style="width:92%" class="invisible z-3 position-fixed bottom-0 bg-gradient container-fluid mt-5 mx-5 mb-3 bg-secondary  border border-white rounded"><div class="position-relative container-sm text-justify p-3">
+<div id="aviso" style="right: 10%; width: 80%" class="aviso-panel invisible z-3 position-fixed bottom-0 bg-gradient container-fluid mt-5 mx-auto mb-3 bg-secondary  border border-white rounded"><div class="position-relative container-sm text-justify p-3">
 <span id="avisoContent"></span>
 </div>
 <button id="fechaAviso" class="btn btn-md rounded position-absolute top-0 end-0">X</button>
 </div>
-<div id="cont" class="z-1 container-xl">
+
+<div id="cont" class="z-1 container">
 	<br/>
 		<h2 class="text-center">Calculadora para dosimetria</h2>
 		<h5 class="text-end">Feito por <a href="http://lattes.cnpq.br/6702944102751831">Daniel Millan</a></h5>
 	<br/>
 	<div class="accordion" id="painel" data-bs-theme="light">
+	
+	
 	  <div class="accordion-item">
 		<h2 class="accordion-header">
 		  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseZero" aria-expanded="true" aria-controls="panelsStayOpen-collapseZero">
@@ -369,24 +372,31 @@ class MinMaj {
 		</h2>
 		<div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show">
 		<button value="tipo" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button>
-		  <div class="accordion-body row">
-			<div class="input-group col">
-			  <span class="input-group-text">
+		  <div class="accordion-body">
+			<div class="row">
+			<div class="col-md-4">
+			<div class="input-group">
+			  <span class="input-group-text p-3">
 			  Crime
 			  </span>
 			  <input type="text" class="form-control" id="nomeTipo" type="text">
+			</div></br>
 			</div>
-			<div class="input-group col">
-			  <span class="input-group-text">Min</span>
-			  <input class="form-control" id="minN" value="1" min="1" max="999" type="number">
+			<div class="col-md-4">
+			<div class="input-group">
+			  <span class="input-group-text p-3">Min</span>
+			  <input class="form-control" id="minN" value="1" min="1" max="99" type="number">
 			  <span class="input-group-text"><select id="minMedida" class="form-select"><option value="12">Anos</option><option value="1">Meses</option></select></span>
+			</div></br>
 			</div>
-			<div class="input-group col">
-			  <span class="input-group-text">Max</span>
-			  <input class="form-control" min="1" id="maxN" value="1" max="999" type="number">
+			<div class="col-md-4">
+			<div class="input-group">
+			  <span class="input-group-text p-3">Max</span>
+			  <input class="form-control" min="1" id="maxN" value="1" max="99" type="number">
 			  <span class="input-group-text"><select id="maxMedida" class="form-select"><option value="12">Anos</option><option value="1">Meses</option></select></span>
+			</div></br>
 			</div>
-	  </div>
+	  </div></div>
 	  </div>
 	  </div>
 	  
@@ -400,10 +410,9 @@ class MinMaj {
 		<button value="fase1" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button>
 		  <div class="accordion-body">
 			<div class="container text-center">
-			  <div class="row align-items-start">
-			  
-				<div class="col row">
-				<div class="col">
+			  <div class="align-items-start">
+				<div class="row">
+				<div class="col-md-3">
 					<label for="ant" class="form-label">Antecedentes<button value="ant" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="ant">
 						<option value="X" selected>Não avaliado</option>
@@ -412,7 +421,7 @@ class MinMaj {
 						<option value="1">Positivo</option>
 					  </select></br>
 				</div>
-				<div class="col">
+				<div class="col-md-3">
 					<label for="conSoc" class="form-label">Conduta social<button value="conSoc" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="conSoc">
 						<option value="X" selected>Não avaliado</option>
@@ -420,9 +429,8 @@ class MinMaj {
 						<option value="0">Neutro</option>
 						<option value="1">Positivo</option>
 					  </select></br>
-				</div></div>
-				<div class="col row">
-				<div class="col">
+				</div>
+				<div class="col-md-3">
 					<label for="circ" class="form-label">Circunstâncias<button value="circ" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="circ">
 						<option value="X" selected>Não avaliado</option>
@@ -431,7 +439,7 @@ class MinMaj {
 						<option value="1">Positivo</option>
 					  </select></br>
 				</div>
-				<div class="col">
+				<div class="col-md-3">
 					<label for="conseq" class="form-label">Consequências<button value="cons" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="conseq">
 						<option value="X" selected>Não avaliado</option>
@@ -439,12 +447,12 @@ class MinMaj {
 						<option value="0">Neutro</option>
 						<option value="1">Positivo</option>
 					  </select></br>
-				</div></div>
-				
+				</div>				
 			  </div>
-			<div class="row align-items-start">
-				<div class="col row">
-				<div class="col">
+			  </div>
+			<div class="align-items-start">
+				<div class="row">
+				<div class="col-md-3">
 					<label for="culp" class="form-label">Culpabilidade<button value="culp" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="culp">
 						<option value="X" selected>Não avaliado</option>
@@ -453,7 +461,7 @@ class MinMaj {
 						<option value="1">Positivo</option>
 					  </select></br>
 				</div>
-				<div class="col">
+				<div class="col-md-3">
 					<label for="mot" class="form-label">Motivos<button value="mot" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="mot">
 						<option value="X" selected>Não avaliado</option>
@@ -461,10 +469,8 @@ class MinMaj {
 						<option value="0">Neutro</option>
 						<option value="1">Positivo</option>
 					  </select></br>
-				</div></div>
-				
-				<div class="col row">
-				<div class="col">
+				</div>
+				<div class="col-md-3">
 					<label for="pers" class="form-label">Personalidade<button value="pers" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="pers">
 						<option value="X" selected>Não avaliado</option>
@@ -473,7 +479,7 @@ class MinMaj {
 						<option value="1">Positivo</option>
 					  </select></br>
 				</div>
-				<div class="col">
+				<div class="col-md-3">
 					<label for="colVit" class="form-label">Colab. vítima<button value="colVit" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></label>
 					<select class="form-select" id="colVit">
 						<option value="X" selected>Não avaliado</option>
@@ -498,26 +504,32 @@ class MinMaj {
 		<button value="fase2" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button>
 		  <div class="accordion-body">
 			<div class="row">
-			<div class="input-group col">
+			<div class="col-md-4">
+			<div class="input-group">
 			  <span class="input-group-text">Nome</span>
-			  <input type="text" class="form-control" id="nomeAteAgr" type="text">
+			  <input type="text" class="form-control p-3" id="nomeAteAgr" type="text">
+			  </div></br>
 			  </div>
-			<div class="input-group col">
-			  <select id="nAteAgr" class="form-select">
+			<div class="col-md-4">
+			<div class="input-group">
+			  <select id="nAteAgr" class="form-select p-3">
 			  <option value="1">Agravante</option>
 			  <option value="-1">Atenuante</option>
 			  </select>
+			</div></br>
 			</div>
-			<div class="input-group col">
+			<div class="col-md-4">
+			<div class="input-group">
 			  <span class="input-group-text">Peso</span>
-			  <select id="pesoAteAgr" class="form-select">
+			  <select id="pesoAteAgr" class="form-select p-3">
 			  <option value="3">Comum</option>
 			  <option value="5">Preponderante</option>
 			  <option value="6">Super preponderante</option>
 			  </select>
+			</div><br>
 			</div>
 			</div>
-			<br><div class="text-center">
+			<div class="text-center">
 			<button type="button" id="btnAddAteAgr" onclick="addAteAgr(this)" class="mx-auto btn btn-info">Adicionar</button>			
 			</div>
 			<table class="table">
@@ -546,17 +558,21 @@ class MinMaj {
 		<button value="fase3" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button>
 		  <div class="accordion-body">
 			<div class="row">
-			<div class="input-group col">
+			<div class="col-md-3 my-auto">
+			<div class="input-group">
 			  <span class="input-group-text">Nome</span>
-			  <input type="text" class="form-control" id="nomeMinMaj" type="text">
+			  <input type="text" class="form-control p-3" id="nomeMinMaj" type="text">
+			</div></br>
 			</div>
-			<div class="input-group col">
-			  <select id="nMinMaj" class="form-select">
+			<div class="col-md-3 my-auto">
+			<div class="input-group">
+			  <select id="nMinMaj" class="form-select  p-3">
 			  <option value="1">Majorante</option>
 			  <option value="-1">Minorante</option>
 			  </select>
+			</div></br>
 			</div>
-			<div class="col">
+			<div class="col-md-3 my-auto">
 			  <div class="input-group">
 			  <span class="input-group-text">Min&nbsp;</span>
 			  <select id="minMinMaj" class="form-select">
@@ -577,20 +593,22 @@ class MinMaj {
 			  <option value="8">Dois terços (2/3)</option>
 			  <option value="12">Dobro</option>
 			  <option value="24">Triplo</option>
-			  </select></div>
+			  </select></div></br>
 			</div>
-			<div class="input-group col">
+			<div class="col-md-3 my-auto">
+			<div class="input-group">
 			  <span class="input-group-text">Grau<button value="grau" class="bt-info rounded-circle btn btn-sm btn-outline-secondary">?</button></span>
-			  <select id="calcMinMaj" class="form-select">
+			  <select id="calcMinMaj" class="form-select p-3">
 			  <option selected value="0">Não se aplica</option>
 			  <option value="1">Mínimo</option>
 			  <option value="2">Médio</option>
 			  <option value="3">Máximo</option>
 			  </select>
+			</div></br>
 			</div>
 			</div>
 			
-			<br><div class="text-center">
+			<div class="text-center">
 			<button type="button" id="btnAddMinMaj" onclick="addMinMaj(this)" class="mx-auto btn btn-info">Adicionar</button>			
 			</div>
 			<table class="table">
@@ -711,9 +729,11 @@ function calcular(e)
 	$(".d-none").removeClass("d-none");
 	preparaTipo();
 	preparaCirc();
-	crime.penaDefinitiva();
+	let pena = crime.penaDefinitiva();	
 	let pos = $("#resultado").offset().top;
     $('body, html').animate({scrollTop: pos});
+	
+	//html('Verifique regime, substituição e suspensão <a href="regime.html?a='+pena.anos()+'&m='+pena.meses()+'&d='+pena.dias()+'" target="_blank">aqui</a>!', "#penaFinal");
 }
 
 function preparaTipo()
