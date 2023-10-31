@@ -11,5 +11,13 @@
 "pers":"Considera-se \"personalidade\" o conjunto de elementos psicológicos do agente voltado ao comportamento criminoso. Deve ser valorado somente se houver laudo técnico nesse sentido.",
 "colVit":"Considera-se \"colaboração da vítima\" o modo de agir da vítima que pode levar ao crime. Deve ser valorado somente se a vítima possuía uma relação prévia com o agente e incitou o delito de alguma forma.",
 "fase2":"Na 2ª fase, serão avaliadas eventuais agravantes ou atenuantes que se apliquem ao caso, nos termos do art. 61 a 67 do Código Penal. Para isso, adicione as agravantes/atenuantes que forem necessárias, informando se são comuns, preponderantes ou super preponderantes.",
-"fase3":"Na 3ª fase, serão avaliadas eventuais majorantes (causas de aumento de pena) ou minorantes (causas de redução de pena) que se apliquem ao caso. Para isso, adicione as majorantes/minorantes que forem necessárias, informando as frações ou intervalos definidos em lei."
+"fase3":"Na 3ª fase, serão avaliadas eventuais majorantes (causas de aumento de pena) ou minorantes (causas de redução de pena) que se apliquem ao caso. Para isso, adicione as majorantes/minorantes que forem necessárias, informando as frações ou intervalos definidos em lei.",
+
+"regimes":"Para verificar o regime inicial do cumprimento de pena e a possibilidade de substituição ou suspensão da pena, é necessária a análise dos requisitos legais para os benefícios.",
+"reinc":"Considera-se \"reincidente\" se o autor possui condenação criminal transitada em julgado com cumprimento/extinção da pena até 5 anos anteriores ao fato, nos termos do art. 63 do Código Penal. O crime da condenação prévia pode ser doloso ou culposo, nos termos do art. 18 do Código Penal.",
+"violencia":"O critério avalia se o crime foi praticado mediante violência ou grave ameaça, caso que impossibilita a substituição da pena.",
+"circJ":"Trata-se das circunstâncias judiciais, avaliadas na 1ª fase da dosimetria, constantes no art. 59 do Código Penal.",
+"doloso":"Se o crime foi praticado de forma dolosa ou culposa, nos termos do art. 18 do Código Penal.",
+"hediondo":"Trata-se dos crimes hediondos, elencados na Lei 8.072/1990, que podem ter um regime inicial mais rigoroso em relação aos demais delitos.",
+"doente":"Existe hipótese de suspensão da pena pela idade (maior de setenta anos) ou por razões de saúde do condenado, conforme art. 77, §2º, do Código Penal"
 }
