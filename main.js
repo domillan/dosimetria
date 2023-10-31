@@ -1,10 +1,10 @@
 class Tempo {
 	constructor(anos=0, meses=0, dias=0) {
-    this.tempo = anos*360 + meses*30 + dias;
+    this.tempo = anos*360 + meses*30 + dias*1;
   }
 	addDias(numero=0)
 	{
-		this.tempo += numero;
+		this.tempo += numero*1;
 	}	
 	addMeses(numero=0)
 	{
